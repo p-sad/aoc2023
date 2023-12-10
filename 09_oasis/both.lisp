@@ -46,10 +46,22 @@
       (carlast (car sequences))
       (find_next_item (cdr sequences)))))
 
-(write-line
-  (format nil "~a"
-    (apply '+
-      (mapcar 'find_next_item
-        (mapcar 'get_sequence_of_differences
-          (mapcar 'to_list_of_numbers
-            (uiop:read-file-lines (car (uiop:command-line-arguments)))))))))
+(defun find_previous_item (sequences)
+;; list(list(int)) => int
+  (if (endp (cdr sequences))
+    (car (car sequences))
+    (-
+      (car (car sequences))
+      (find_previous_item (cdr sequences)))))
+
+(defun print_result (direction)
+  (write-line
+    (format nil "~a"
+      (apply '+
+        (mapcar direction
+          (mapcar 'get_sequence_of_differences
+            (mapcar 'to_list_of_numbers
+              (uiop:read-file-lines (car (uiop:command-line-arguments))))))))))
+
+(print_result #'find_next_item)
+(print_result #'find_previous_item)
