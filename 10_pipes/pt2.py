@@ -27,7 +27,7 @@ def main(filename: str):
     # and now for the most horrible flood fill algorithm
     flood_filled = set()
     fill_candidates: list[Vector] = []
-    segments_positions = [segment.position for segment in segments]
+    segments_positions = set(segment.position for segment in segments)
     for i in range(len(segments)):
         fill_candidates += segments[(i+1)%len(segments)].get_flood_fill_positions(segments[i])
     for candidate in fill_candidates:
