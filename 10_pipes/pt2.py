@@ -28,21 +28,21 @@ def main(filename: str):
     flood_filled = set()
     fill_candidates: list[Vector] = []
     segments_positions = set(segment.position for segment in segments)
+    # first step: fill initial positions adjacent to the pipe
     for i in range(len(segments)):
         fill_candidates += segments[(i+1)%len(segments)].get_flood_fill_positions(segments[i])
     for candidate in fill_candidates:
         if candidate not in segments_positions:
             flood_filled.add(candidate)
-    filled_this_iteration = len(flood_filled)
+    # second..nth steps: bloom the filled positions until no new positions are filled
     last_iteration_filled = flood_filled
     current_iteration_filled = set()
-    while filled_this_iteration != 0:
+    while len(last_iteration_filled) != 0:
         for pos in last_iteration_filled:
             candidates = bloom(pos)
             for candidate in candidates:
                 if candidate not in segments_positions and candidate not in flood_filled:
                     current_iteration_filled.add(candidate)
-        filled_this_iteration = len(current_iteration_filled)
         flood_filled |= current_iteration_filled
         last_iteration_filled = current_iteration_filled
         current_iteration_filled = set()
